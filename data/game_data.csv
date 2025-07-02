@@ -1,0 +1,30 @@
+import pandas as pd
+import numpy as np
+
+# Set seed for reproducibility
+np.random.seed(42)
+n = 300  # Number of players
+
+# Generate simulated game data
+data = pd.DataFrame({
+    'Player_ID': range(1, n + 1),
+    'Level': np.random.randint(1, 10, size=n),
+    'Time_Played': np.random.uniform(5, 60, size=n).round(2),
+    'Actions_Per_Minute': np.random.uniform(20, 100, size=n).round(2),
+    'Items_Collected': np.random.randint(0, 20, size=n)
+})
+
+# Create score based on features
+data['Final_Score'] = (
+    data['Level'] * 100 +
+    data['Items_Collected'] * 10 +
+    data['Actions_Per_Minute'] * 5
+).astype(int)
+
+# Set win label: if score > 1000, player wins
+data['Won'] = (data['Final_Score'] > 1000).astype(int)
+
+# Save to CSV
+data.to_csv("data/game_data.csv", index=False)
+
+print("✅ Game data generated and saved to data/game_data.csv")
